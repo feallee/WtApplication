@@ -29,13 +29,10 @@
 /// @brief Indicates an unknown event and is not allowed when defining a event by the user.
 #define WT_APPLICATION_EVENT_UNKNOWN (0xff)
 
-/// @brief Represents a null pointer.
-#define WT_APPLICATION_NULL ((void *)0)
-
-/// @brief The transition model of state machine.
+/// @brief The transition model of the state machine.
 typedef struct
 {
-	/// @brief The current state
+	/// @brief The current state.
 	char current;
 	/// @brief Event with the current state.
 	char event;
@@ -48,39 +45,26 @@ typedef struct
 /// @brief Await invoke async function.
 void wt_application_await(void);
 
-/// @brief Change state transition table.
+/// @brief Start the state machine.
 /// @param transition_index Transition table index(0-3).
-/// @param initial_state Initial state of state machine.
-void wt_application_change(unsigned char transition_index, char initial_state);
+/// @param initial_state Initial state of the state machine.
+void wt_application_start(unsigned char transition_index, char initial_state);
 
 /// @brief Raise an event to the state machine.
 /// @return Returns the state transition flag(0 = Fail, not 0 = Success).
 unsigned char wt_application_raise(char event);
 
+/// @brief Get current state of the state machine.
+char wt_application_get_state(void);
+
+#include <STDIO.H>
+#include <STRING.H>
+#include <STDLIB.H>
 #include <RTX51TNY.H>
 ///
 /// todo... Include head files here.
 ///
 #include "test.h"
-
-/// @brief Context type of the application.
-typedef struct
-{
-	/// @brief Count of async function table.
-	unsigned char async_count;
-	/// @brief The current state of the state machine.
-	char current_state;
-	/// @brief Count of state transition table.
-	unsigned char transition_count;
-	/// @brief The current transition table of state machine.
-	wt_application_transition_type *transition_table;
-	///
-	/// todo... Define other context fields here.
-	///
-} wt_application_context_type;
-
-/// @brief Get context of the application.
-extern wt_application_context_type wt_application_context;
 
 static code void(code *wt_application_initialize_table[])(void) =
 	{
@@ -95,7 +79,7 @@ static code void(code *wt_application_async_table[])(void) =
 	{
 		/*
 		 * Note:
-		 * 1.Each user task corresponds to an async function.If the task does not have an async function, use WT_APPLICATION_NULL instead.
+		 * 1.Each user task corresponds to an async function.If the task does not have an async function, use NULL instead.
 		 * 2.Maximum count:15.
 		 * 3.Table index = Task id - 1.
 		 */
@@ -132,7 +116,7 @@ static code wt_application_transition_type wt_application_transition_table1[] =
 		///
 		/// todo... Define transitions here.
 		///
-		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_NULL},
+		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, NULL},
 };
 
 static code wt_application_transition_type wt_application_transition_table2[] =
@@ -140,7 +124,7 @@ static code wt_application_transition_type wt_application_transition_table2[] =
 		///
 		/// todo... Define transitions here.
 		///
-		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_NULL},
+		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, NULL},
 };
 
 static code wt_application_transition_type wt_application_transition_table3[] =
@@ -148,6 +132,6 @@ static code wt_application_transition_type wt_application_transition_table3[] =
 		///
 		/// todo... Define transitions here.
 		///
-		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_NULL},
+		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, NULL},
 };
 #endif

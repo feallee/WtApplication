@@ -2,8 +2,8 @@
 
 void test_initialize(void)
 {
+    wt_application_start(2, 'a');
     os_create_task(1);
-    wt_application_change(2, 'a');
 }
 
 void test_async(void)
