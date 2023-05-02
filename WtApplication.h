@@ -57,6 +57,8 @@ unsigned char wt_application_raise(char event);
 /// @brief Get current state of the state machine.
 char wt_application_get_state(void);
 
+extern unsigned char wt_application_wait(unsigned char type, unsigned int count, unsigned char tick);
+
 #include <STDIO.H>
 #include <STRING.H>
 #include <STDLIB.H>
@@ -66,7 +68,7 @@ char wt_application_get_state(void);
 ///
 #include "test.h"
 
-static code void(code *wt_application_initialize_table[])(void) =
+static code const void(code *wt_application_initialize_table[])(void) =
 	{
 		///
 		/// todo... Register initialize functions here.
@@ -75,7 +77,7 @@ static code void(code *wt_application_initialize_table[])(void) =
 
 };
 
-static code void(code *wt_application_async_table[])(void) =
+static code const void(code *wt_application_async_table[])(void) =
 	{
 		/*
 		 * Note:
@@ -103,7 +105,7 @@ static code void(code *wt_application_async_table[])(void) =
 					// table index #14 = task #15
 };
 
-static code wt_application_transition_type wt_application_transition_table0[] =
+static code const wt_application_transition_type wt_application_transition_table0[] =
 	{
 		///
 		/// todo... Define transitions here.
@@ -111,7 +113,7 @@ static code wt_application_transition_type wt_application_transition_table0[] =
 		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, test_action},
 };
 
-static code wt_application_transition_type wt_application_transition_table1[] =
+static code const wt_application_transition_type wt_application_transition_table1[] =
 	{
 		///
 		/// todo... Define transitions here.
@@ -119,7 +121,7 @@ static code wt_application_transition_type wt_application_transition_table1[] =
 		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, NULL},
 };
 
-static code wt_application_transition_type wt_application_transition_table2[] =
+static code const wt_application_transition_type wt_application_transition_table2[] =
 	{
 		///
 		/// todo... Define transitions here.
@@ -127,7 +129,7 @@ static code wt_application_transition_type wt_application_transition_table2[] =
 		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, NULL},
 };
 
-static code wt_application_transition_type wt_application_transition_table3[] =
+static code const wt_application_transition_type wt_application_transition_table3[] =
 	{
 		///
 		/// todo... Define transitions here.
