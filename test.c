@@ -2,7 +2,7 @@
 
 void test_initialize(void)
 {
-    wt_application_start(0, WT_APPLICATION_EVENT_UNKNOWN);
+    wt_application_start(0, WT_APPLICATION_STATE_UNKNOWN);
     os_create_task(1);
 }
 
