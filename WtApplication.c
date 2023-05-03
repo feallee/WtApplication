@@ -16,11 +16,13 @@ static struct
 void wt_application_job(void) _task_ 0
 {
     unsigned char t;
+    void(code * act)(void) = NULL;
     for (t = 0; t < WT_APPLICATION_COUNT(wt_application_initialize_table); t++)
     {
-        if (wt_application_initialize_table[t])
+        act = wt_application_initialize_table[t];
+        if (act)
         {
-            wt_application_initialize_table[t]();
+            act();
         }
     }
     while (1)
@@ -44,13 +46,16 @@ void wt_application_job(void) _task_ 0
             _app.read_index++;
         }
         // 3. Invoke.
-        if (wt_application_async_table[t - 1])
+        if (WT_APPLICATION_GET_BIT(_app.async_flag, t))
         {
-            wt_application_async_table[t - 1]();
+            act = wt_application_async_table[t - 1];
+            if (act)
+            {
+                act();
+            }          
+            WT_APPLICATION_CLR_BIT(_app.async_flag, t);
+            os_send_signal(t);
         }
-        // 4.Notify.
-        WT_APPLICATION_CLR_BIT(_app.async_flag, t);
-        os_send_signal(t);
     }
 }
 
@@ -111,20 +116,22 @@ void wt_application_start(unsigned char transition_index, char initial_state)
 unsigned char wt_application_raise(char event)
 {
     unsigned char i, ret = 0;
+    wt_application_transition_type *tran;
     if (_app.transition_table)
     {
         for (i = 0; i < _app.transition_count; i++)
         {
-            if (_app.transition_table[i].current == _app.current_state)
+            tran = &_app.transition_table[i];
+            if (tran->current == _app.current_state)
             {
-                if (_app.transition_table[i].event == event)
+                if (tran->event == event)
                 {
-                    _app.current_state = _app.transition_table[i].next;
-                    if (_app.transition_table[i].action)
-                    {
-                        _app.transition_table[i].action();
-                    }
                     ret = 1;
+                    _app.current_state = tran->next;
+                    if (tran->action)
+                    {
+                        tran->action();
+                    }
                     break;
                 }
             }
