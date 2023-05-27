@@ -1,10 +1,10 @@
 ;#include <rtx51tny.h>
-;unsigned char wt_application_wait(unsigned char type, unsigned int count, unsigned char tick)
+;unsigned char wt_application_wait(unsigned char type, unsigned int count, unsigned char ticks)
 ;{
 ;	unsigned char ret = TMO_EVENT;
 ;	while(count-- && ret == TMO_EVENT)
 ;	{
-;		ret = os_wait2(type, tick);
+;		ret = os_wait2(type, ticks);
 ;	}
 ;	return ret;
 ;}
@@ -13,11 +13,11 @@ NAME	WTAPPLICATIONWAIT
 ?PR?_wt_application_wait?WTAPPLICATIONWAIT       SEGMENT CODE 
 	EXTRN	CODE (_os_wait2)
 	PUBLIC	_wt_application_wait 
-; unsigned char wt_application_wait(unsigned char type, unsigned int count, unsigned char tick)
+; unsigned char wt_application_wait(unsigned char type, unsigned int count, unsigned char ticks)
 	RSEG  ?PR?_wt_application_wait?WTAPPLICATIONWAIT
 _wt_application_wait:
 	USING	0		
-	MOV	R0,AR3;tick
+	MOV	R0,AR3;ticks
 	MOV R3,AR7;type
 	MOV	R1,AR4;count msb
 	MOV	R2,AR5;count lsb	
@@ -38,12 +38,12 @@ _wt_application_wait:
 	XRL  	A,#08H
 	JNZ  	?C0002
 ; 	{			
-; 		ret = os_wait2(type, tick);
+; 		ret = os_wait2(type, ticks);
 	PUSH	AR0;
 	PUSH	AR1
 	PUSH	AR2
 	PUSH 	AR3
-	MOV  	R5,AR0;tick
+	MOV  	R5,AR0;ticks
 	MOV  	R7,AR3;type
 	LCALL	_os_wait2
 	POP		AR3

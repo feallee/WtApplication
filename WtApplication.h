@@ -6,10 +6,24 @@
  * Date			Author						Notes
  * 2023/03/04	feallee@hotmail.com			First implementation.
  * 2023/04/26   feallee@hotmail.com         Streamline business logic.
+ * 2023/05/27   feallee@hotmail.com         Streamline business logic.
  */
 
 #ifndef __WT_APPLICATION_H_
 #define __WT_APPLICATION_H_
+
+#include <STDDEF.H>
+#include <RTX51TNY.H>
+///
+/// todo... Include head files here.
+///
+#include "test.h"
+
+/// @brief Indicates an unknown state and is not allowed when defining a state by the user.
+#define WT_APPLICATION_STATE_UNKNOWN (-1)
+
+/// @brief Indicates an unknown event and is not allowed when defining a event by the user.
+#define WT_APPLICATION_EVENT_UNKNOWN (-1)
 
 /// @brief Get the y-th bit value of x.
 #define WT_APPLICATION_GET_BIT(x, y) (((x) >> (y)) & 1)
@@ -22,25 +36,6 @@
 
 /// @brief Get the count of the array.
 #define WT_APPLICATION_COUNT(arr) (sizeof(arr) / sizeof(arr[0]))
-
-/// @brief Indicates an unknown state and is not allowed when defining a state by the user.
-#define WT_APPLICATION_STATE_UNKNOWN (0xff)
-
-/// @brief Indicates an unknown event and is not allowed when defining a event by the user.
-#define WT_APPLICATION_EVENT_UNKNOWN (0xff)
-
-/// @brief The transition model of the state machine.
-typedef struct
-{
-	/// @brief The current state.
-	char current;
-	/// @brief Event with the current state.
-	char event;
-	/// @brief Next state with the event.
-	char next;
-	/// @brief Action with the event.
-	void(code *action)(void);
-} wt_application_transition_type;
 
 /// @brief Await invoke async function.
 void wt_application_await(void);
@@ -57,83 +52,10 @@ unsigned char wt_application_raise(char event);
 /// @brief Get current state of the state machine.
 char wt_application_get_state(void);
 
-extern unsigned char wt_application_wait(unsigned char type, unsigned int count, unsigned char tick);
-
-#include <STDIO.H>
-#include <STRING.H>
-#include <STDLIB.H>
-#include <RTX51TNY.H>
-///
-/// todo... Include head files here.
-///
-#include "test.h"
-
-static code const void(code *wt_application_initialize_table[])(void) =
-	{
-		///
-		/// todo... Register initialize functions here.
-		///
-		test_initialize,
-
-};
-
-static code const void(code *wt_application_async_table[])(void) =
-	{
-		/*
-		 * Note:
-		 * 1.Each user task corresponds to an async function.If the task does not have an async function, use NULL instead.
-		 * 2.Maximum count:15.
-		 * 3.Table index = Task id - 1.
-		 */
-		///
-		/// todo... Register async functions here.
-		///
-		test_async, // table index #0 = task #1
-					// table index #1 = task #2
-					// table index #2 = task #3
-					// table index #3 = task #4
-					// table index #4 = task #5
-					// table index #5 = task #6
-					// table index #6 = task #7
-					// table index #7 = task #8
-					// table index #8 = task #9
-					// table index #9 = task #10
-					// table index #10 = task #11
-					// table index #11 = task #12
-					// table index #12 = task #13
-					// table index #13 = task #14
-					// table index #14 = task #15
-};
-
-static code const wt_application_transition_type wt_application_transition_table0[] =
-	{
-		///
-		/// todo... Define transitions here.
-		///
-		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, test_action},
-};
-
-static code const wt_application_transition_type wt_application_transition_table1[] =
-	{
-		///
-		/// todo... Define transitions here.
-		///
-		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, NULL},
-};
-
-static code const wt_application_transition_type wt_application_transition_table2[] =
-	{
-		///
-		/// todo... Define transitions here.
-		///
-		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, NULL},
-};
-
-static code const wt_application_transition_type wt_application_transition_table3[] =
-	{
-		///
-		/// todo... Define transitions here.
-		///
-		{WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, NULL},
-};
+/// @brief Waiting for an RTX-51 event. 
+/// @param type RTX-51 event type:K_SIG, K_TMO, K_IVL.
+/// @param count Repeat count.
+/// @param ticks timeout in hardware-timer ticks.
+/// @return return RTX-51 event:NOT_OK, TMO_EVENT, SIG_EVENT, RDY_EVENT.
+extern unsigned char wt_application_wait(unsigned char type, unsigned int count, unsigned char ticks);
 #endif
