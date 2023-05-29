@@ -4,7 +4,7 @@
             "name": "8051",
             "includePath": [
                 "D:\\Keil_v5\\C51\\INC",
-                "e:\\Work\\WtApplication\\WtApplication"
+                "e:\\FealLeeWork\\WtApplication"
             ],
             "defines": [
                 "__C51__",

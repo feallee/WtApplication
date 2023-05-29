@@ -5,4 +5,4 @@
 /.vscode
 /.vs
 .vscode/keil-assistant.log
-.vscode/keil-assistant.log
+.vscode/c_cpp_properties.json
