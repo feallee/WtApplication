@@ -123,7 +123,7 @@ static void __main(void) _task_ 0
 
 void wt_application_show(void)
 {
-    printf(WT_DEVICE_DESCRIPTION);
+    printf(WT_APPLICATION_DESCRIPTION);
 }
 
 void wt_application_await(void)

@@ -23,16 +23,16 @@
 ///
 /// todo... Define the application description.
 ///
-#define WT_DEVICE_DESCRIPTION "**************************************************************************\r\n" \
-							  "  _      ________  This is an application launcher based on RTX-51 TINY   \r\n" \ 
-							  " | | /| / /_  __/  real-time operating system, and it supports state      \r\n" \
-							  " | |/ |/ / / /     machine architecture.                                  \r\n" \
-							  " |__/|__/ /_/                                                             \r\n" \
-							  "                   Home: https://weas.top.                                \r\n" \
-							  "                   Issues: https://github.com/feallee.                    \r\n" \
-							  "                                                                          \r\n" \
-							  "                   Powered by feallee@hotmail.com.                        \r\n" \
-							  "--------------------------------------------------------------------------\r\n"
+#define WT_APPLICATION_DESCRIPTION "**************************************************************************\r\n" \
+								   "  _      ________  This is an application launcher based on RTX-51 TINY   \r\n" \ 
+	                               " | | /| / /_  __/  real-time operating system, and it supports state      \r\n" \
+								   " | |/ |/ / / /     machine architecture.                                  \r\n" \
+								   " |__/|__/ /_/                                                             \r\n" \
+								   "                   Home: https://weas.top.                                \r\n" \
+								   "                   Issues: https://github.com/feallee.                    \r\n" \
+								   "                                                                          \r\n" \
+								   "                   Powered by feallee@hotmail.com.                        \r\n" \
+								   "--------------------------------------------------------------------------\r\n"
 
 /// @brief Indicates an unknown state and is not allowed when defining a state by the user.
 #define WT_APPLICATION_STATE_UNKNOWN (-1)
