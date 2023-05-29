@@ -17,7 +17,22 @@
 ///
 /// todo... Include head files here.
 ///
+#include <STDIO.H>
 #include "test.h"
+
+///
+/// todo... Define the application description.
+///
+#define WT_DEVICE_DESCRIPTION "**************************************************************************\r\n" \
+							  "  _      ________  This is an application launcher based on RTX-51 TINY   \r\n" \ 
+							  " | | /| / /_  __/  real-time operating system, and it supports state      \r\n" \
+							  " | |/ |/ / / /     machine architecture.                                  \r\n" \
+							  " |__/|__/ /_/                                                             \r\n" \
+							  "                   Home: https://weas.top.                                \r\n" \
+							  "                   Issues: https://github.com/feallee.                    \r\n" \
+							  "                                                                          \r\n" \
+							  "                   Powered by feallee@hotmail.com.                        \r\n" \
+							  "--------------------------------------------------------------------------\r\n"
 
 /// @brief Indicates an unknown state and is not allowed when defining a state by the user.
 #define WT_APPLICATION_STATE_UNKNOWN (-1)
@@ -37,6 +52,9 @@
 /// @brief Get the count of the array.
 #define WT_APPLICATION_COUNT(arr) (sizeof(arr) / sizeof(arr[0]))
 
+/// @brief Show the application description.
+void wt_application_show(void);
+
 /// @brief Await invoke async function.
 void wt_application_await(void);
 
@@ -52,8 +70,8 @@ unsigned char wt_application_raise(char event);
 /// @brief Get current state of the state machine.
 char wt_application_get_state(void);
 
-/// @brief Waiting for an RTX-51 event. 
-/// @param type RTX-51 event type:K_SIG, K_TMO, K_IVL.
+/// @brief Waiting for an RTX-51 event.
+/// @param type RTX-51 event type:K_SIG, K_TMO, K_IVL, K_SIG | K_TMO, K_IVL | K_TMO.
 /// @param count Repeat count.
 /// @param ticks timeout in hardware-timer ticks.
 /// @return return RTX-51 event:NOT_OK, TMO_EVENT, SIG_EVENT, RDY_EVENT.

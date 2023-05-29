@@ -2,7 +2,7 @@
 /Objects
 /Overlay
 /WtApplication.uvgui.Administrator
-/.vscode
 /.vs
-.vscode/keil-assistant.log
-.vscode/c_cpp_properties.json
+/.vscode
+.vscode/uv4.log
+.vscode/uv4.log.lock
