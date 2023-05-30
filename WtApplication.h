@@ -41,16 +41,13 @@
 #define WT_APPLICATION_EVENT_UNKNOWN (-1)
 
 /// @brief Get the y-th bit value of x.
-#define WT_APPLICATION_GET_BIT(x, y) (((x) >> (y)) & 1)
+#define WT_APPLICATION_GET_BIT(X, Y) (((X) >> (Y)) & 1)
 
-/// @brief Set the y-th bit value of x.
-#define WT_APPLICATION_SET_BIT(x, y) ((x) |= (1UL << (y)))
-
-/// @brief Clear the y-th bit value of x.
-#define WT_APPLICATION_CLR_BIT(x, y) ((x) &= ~(1UL << (y)))
+/// @brief Set the value of the y-th bit of x to v.
+#define WT_APPLICATION_SET_BIT(X, Y, V) ((X) = (V) ? (X) | (1UL << (Y)) : (X) & (~(1UL << (Y))))
 
 /// @brief Get the count of the array.
-#define WT_APPLICATION_COUNT(arr) (sizeof(arr) / sizeof(arr[0]))
+#define WT_APPLICATION_COUNT(ARRAY) (sizeof(ARRAY) / sizeof(ARRAY[0]))
 
 /// @brief Show the application description.
 void wt_application_show(void);

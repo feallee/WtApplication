@@ -95,9 +95,9 @@ static void __main(void) _task_ 0
         // 1.Wait.
         while (_app.read_index == _app.write_index && _app.read_mirror == _app.write_mirror)
         {
-            WT_APPLICATION_SET_BIT(_app.async_flag, 0);
+            WT_APPLICATION_SET_BIT(_app.async_flag, 0, 1);
             os_wait1(K_SIG);
-            WT_APPLICATION_CLR_BIT(_app.async_flag, 0);
+            WT_APPLICATION_SET_BIT(_app.async_flag, 0, 0);
         }
         // 2.Dequeue.
         t = _app.buffer[_app.read_index];
@@ -116,7 +116,7 @@ static void __main(void) _task_ 0
         {
             act();
         }
-        WT_APPLICATION_CLR_BIT(_app.async_flag, t);
+        WT_APPLICATION_SET_BIT(_app.async_flag, t, 0);
         os_send_signal(t);
     }
 }
@@ -145,7 +145,7 @@ void wt_application_await(void)
         os_send_signal(0);
     }
     // 3.Wait.
-    WT_APPLICATION_SET_BIT(_app.async_flag, os_running_task_id());
+    WT_APPLICATION_SET_BIT(_app.async_flag, os_running_task_id(), 1);
     do
     {
         os_wait1(K_SIG);
