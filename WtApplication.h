@@ -24,8 +24,8 @@
 /// todo... Define the application description.
 ///
 #define WT_APPLICATION_DESCRIPTION "**************************************************************************\r\n" \
-								   "  _      ________  This is an application launcher based on RTX-51 TINY   \r\n" \ 
-	                               " | | /| / /_  __/  real-time operating system, and it supports state      \r\n" \
+								   "  _      ________  This is an application launcher based on RTX-51 TINY   \r\n" \
+								   " | | /| / /_  __/  real-time operating system, and it supports state      \r\n" \
 								   " | |/ |/ / / /     machine architecture.                                  \r\n" \
 								   " |__/|__/ /_/                                                             \r\n" \
 								   "                   Home: https://weas.top.                                \r\n" \
@@ -35,22 +35,19 @@
 								   "--------------------------------------------------------------------------\r\n"
 
 /// @brief Indicates an unknown state and is not allowed when defining a state by the user.
-#define WT_APPLICATION_STATE_UNKNOWN (-1)
+#define WT_APPLICATION_STATE_UNKNOWN EOF
 
 /// @brief Indicates an unknown event and is not allowed when defining a event by the user.
-#define WT_APPLICATION_EVENT_UNKNOWN (-1)
+#define WT_APPLICATION_EVENT_UNKNOWN EOF
 
-/// @brief Get the y-th bit value of x.
-#define WT_APPLICATION_GET_BIT(X, Y) (((X) >> (Y)) & 1)
+/// @brief Get the value of the n-th bit value of x.
+#define WT_APPLICATION_GET_BIT(X, N) (((X) >> (N)) & 1)
 
-/// @brief Set the value of the y-th bit of x to v.
-#define WT_APPLICATION_SET_BIT(X, Y, V) ((X) = (V) ? (X) | (1UL << (Y)) : (X) & (~(1UL << (Y))))
+/// @brief Set the value of the n-th bit of x to v.
+#define WT_APPLICATION_SET_BIT(X, N, V) ((X) = (V) ? (X) | (1UL << (N)) : (X) & (~(1UL << (N))))
 
 /// @brief Get the count of the array.
 #define WT_APPLICATION_COUNT(ARRAY) (sizeof(ARRAY) / sizeof(ARRAY[0]))
-
-/// @brief Show the application description.
-void wt_application_show(void);
 
 /// @brief Await invoke async function.
 void wt_application_await(void);
@@ -70,7 +67,7 @@ char wt_application_get_state(void);
 /// @brief Waiting for an RTX-51 event.
 /// @param type RTX-51 event type:K_SIG, K_TMO, K_IVL, K_SIG | K_TMO, K_IVL | K_TMO.
 /// @param count Repeat count.
-/// @param ticks timeout in hardware-timer ticks.
+/// @param ticks Timeout in hardware-timer ticks.
 /// @return return RTX-51 event:NOT_OK, TMO_EVENT, SIG_EVENT, RDY_EVENT.
-extern unsigned char wt_application_wait(unsigned char type, unsigned int count, unsigned char ticks);
+unsigned char wt_application_wait(unsigned char type, unsigned int count, unsigned char ticks);
 #endif

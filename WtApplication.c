@@ -87,10 +87,10 @@ static void __main(void) _task_ 0
     /// todo... Register initialize functions here.
     ///
     test_initialize();
-    wt_application_show();
+    printf(WT_APPLICATION_DESCRIPTION);
     while (1)
     {
-        void(code * _act)(void);
+        void(code * act)(void);
         unsigned char t;
         // 1.Wait.
         while (_app.read_index == _app.write_index && _app.read_mirror == _app.write_mirror)
@@ -119,11 +119,6 @@ static void __main(void) _task_ 0
         WT_APPLICATION_SET_BIT(_app.async_flag, t, 0);
         os_send_signal(t);
     }
-}
-
-void wt_application_show(void)
-{
-    printf(WT_APPLICATION_DESCRIPTION);
 }
 
 void wt_application_await(void)
@@ -189,13 +184,13 @@ unsigned char wt_application_raise(char event)
             if (tran->current == _app.current_state)
             {
                 if (tran->event == event)
-                {
-                    ret = 1;
+                {                    
                     _app.current_state = tran->next;
                     if (tran->action)
                     {
                         tran->action();
                     }
+                    ret = 1;
                     break;
                 }
             }
