@@ -174,17 +174,17 @@ void wt_application_start(unsigned char transition_index, char initial_state)
 
 unsigned char wt_application_raise(char event)
 {
-    unsigned char i, ret = 0;
-    _transition_type *tran;
+    unsigned char ret = 0;
     if (_app.transition_table)
     {
+        unsigned char i;
         for (i = 0; i < _app.transition_count; i++)
         {
-            tran = &_app.transition_table[i];
+            _transition_type * tran = &_app.transition_table[i];
             if (tran->current == _app.current_state)
             {
                 if (tran->event == event)
-                {                    
+                {
                     _app.current_state = tran->next;
                     if (tran->action)
                     {

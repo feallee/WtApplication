@@ -22,6 +22,6 @@ void test_job(void) _task_ 1
     while (1)
     {
         wt_application_await();
-		wt_application_wait(K_TMO,1,255);
+        wt_application_wait(K_TMO, 1, 255);
     }
 }
