@@ -1,12 +1,20 @@
 #include "WtApplication.h"
 
-/// @brief Each user task corresponds to an async function.If the task does not have an async function, use NULL instead.
-static code const void(code *_async_table[])(void) =
+static void initialize(void)
+{
+    ///
+    /// todo... Register initialize functions here.
+    ///
+    test_initialize();
+}
+
+static code void(code *_async_table[])(void) =
     {
         ///
-        /// todo... Register async functions here.
+        /// todo... Register async functions here.Each user task corresponds to an async function.If the task does not have an async function, use NULL instead.
+        ///         (Maximum count 15, Table row index = Task id - 1).
         ///
-        test_async, // Table row index #0 = Task id #1, Maximum count 15, Table row index = Task id - 1.
+        test_async, // Table row index #0 = Task id #1
                     // Table row index #1 = Task id #2
                     // Table row index #2 = Task id #3
                     // Table row index #3 = Task id #4
@@ -36,7 +44,7 @@ typedef struct
     void(code *action)(void);
 } _transition_type;
 
-static code const _transition_type _transition_table0[] =
+static code _transition_type _transition_table0[] =
     {
         ///
         /// todo... Define transitions here. Maximum count 64.
@@ -44,7 +52,7 @@ static code const _transition_type _transition_table0[] =
         {WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, test_action},
 };
 
-static code const _transition_type _transition_table1[] =
+static code _transition_type _transition_table1[] =
     {
         ///
         /// todo... Define transitions here. Maximum count 64.
@@ -52,7 +60,7 @@ static code const _transition_type _transition_table1[] =
         {WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, NULL},
 };
 
-static code const _transition_type _transition_table2[] =
+static code _transition_type _transition_table2[] =
     {
         ///
         /// todo... Define transitions here. Maximum count 64.
@@ -60,13 +68,18 @@ static code const _transition_type _transition_table2[] =
         {WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, NULL},
 };
 
-static code const _transition_type _transition_table3[] =
+static code _transition_type _transition_table3[] =
     {
         ///
         /// todo... Define transitions here. Maximum count 64.
         ///
         {WT_APPLICATION_STATE_UNKNOWN, WT_APPLICATION_EVENT_UNKNOWN, WT_APPLICATION_STATE_UNKNOWN, NULL},
 };
+
+//------------------------------------------------------------------------------
+//----------------- !!! End of User Configuration Part    !!! ------------------
+//----------------- !!! Do not modify code sections below !!! ------------------
+//------------------------------------------------------------------------------
 
 static struct
 {
@@ -81,43 +94,44 @@ static struct
     _transition_type *transition_table;
 } _app = {0, 0, 0, 0, 0, 0, {0}, WT_APPLICATION_STATE_UNKNOWN, NULL};
 
-static void __main(void) _task_ 0
+static void run(void)
 {
-    ///
-    /// todo... Register initialize functions here.
-    ///
-    test_initialize();
-    printf(WT_APPLICATION_DESCRIPTION);
+    void(code * act)(void);
+    unsigned char t;
+    // 1.Wait.
+    while (_app.read_index == _app.write_index && _app.read_mirror == _app.write_mirror)
+    {
+        WT_APPLICATION_SET_BIT(_app.async_flag, 0, 1);
+        os_wait1(K_SIG);
+        WT_APPLICATION_SET_BIT(_app.async_flag, 0, 0);
+    }
+    // 2.Dequeue.
+    t = _app.buffer[_app.read_index];
+    if (_app.read_index == WT_APPLICATION_COUNT(_async_table) - 1)
+    {
+        _app.read_mirror = ~_app.read_mirror;
+        _app.read_index = 0;
+    }
+    else
+    {
+        _app.read_index++;
+    }
+    // 3. Invoke.
+    act = _async_table[t - 1];
+    if (act)
+    {
+        act();
+    }
+    WT_APPLICATION_SET_BIT(_app.async_flag, t, 0);
+    os_send_signal(t);
+}
+
+static void entry(void) _task_ 0
+{
+    initialize();
     while (1)
     {
-        void(code * act)(void);
-        unsigned char t;
-        // 1.Wait.
-        while (_app.read_index == _app.write_index && _app.read_mirror == _app.write_mirror)
-        {
-            WT_APPLICATION_SET_BIT(_app.async_flag, 0, 1);
-            os_wait1(K_SIG);
-            WT_APPLICATION_SET_BIT(_app.async_flag, 0, 0);
-        }
-        // 2.Dequeue.
-        t = _app.buffer[_app.read_index];
-        if (_app.read_index == WT_APPLICATION_COUNT(_async_table) - 1)
-        {
-            _app.read_mirror = ~_app.read_mirror;
-            _app.read_index = 0;
-        }
-        else
-        {
-            _app.read_index++;
-        }
-        // 3. Invoke.
-        act = _async_table[t - 1];
-        if (act)
-        {
-            act();
-        }
-        WT_APPLICATION_SET_BIT(_app.async_flag, t, 0);
-        os_send_signal(t);
+        run();
     }
 }
 
@@ -147,7 +161,7 @@ void wt_application_await(void)
     } while (WT_APPLICATION_GET_BIT(_app.async_flag, os_running_task_id()));
 }
 
-void wt_application_start(unsigned char transition_index, char initial_state)
+void wt_application_change(unsigned char transition_index, char initial_state)
 {
     if (transition_index == 3)
     {
@@ -180,7 +194,7 @@ unsigned char wt_application_raise(char event)
         unsigned char i;
         for (i = 0; i < _app.transition_count; i++)
         {
-            _transition_type * tran = &_app.transition_table[i];
+            _transition_type *tran = &_app.transition_table[i];
             if (tran->current == _app.current_state)
             {
                 if (tran->event == event)

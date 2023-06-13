@@ -2,13 +2,15 @@
 
 void test_initialize(void)
 {
-    wt_application_start(0, WT_APPLICATION_STATE_UNKNOWN);
+    wt_application_change(0, WT_APPLICATION_STATE_UNKNOWN);
     os_create_task(1);
+   // printf(WT_APPLICATION_DESCRIPTION);
 }
 
 void test_async(void)
 {
     wt_application_raise(WT_APPLICATION_EVENT_UNKNOWN);
+    wt_application_get_state();
 }
 
 void test_action(void)
@@ -22,6 +24,5 @@ void test_job(void) _task_ 1
     while (1)
     {
         wt_application_await();
-        wt_application_wait(K_TMO, 1, 255);
     }
 }

@@ -397,11 +397,6 @@
               <FilePath>.\Conf_tny.A51</FilePath>
             </File>
             <File>
-              <FileName>WtApplicationWait.a51</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\WtApplicationWait.a51</FilePath>
-            </File>
-            <File>
               <FileName>Overlay.lin</FileName>
               <FileType>5</FileType>
               <FilePath>.\Overlay.lin</FilePath>
